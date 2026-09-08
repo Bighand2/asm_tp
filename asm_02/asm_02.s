@@ -1,9 +1,9 @@
-global_start
+global _start
 
 section .bss
     input resb 256
 section .data
-    msg db 0x31, 0x33, 0x33, 0x37, 0x0A
+    msg db "1337", 10
 
 section .text
 _start:
@@ -19,6 +19,12 @@ _start:
 
     cmp byte [input + 1], 0x32
     jne _error
+
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, msg
+    mov rdx, 5
+    syscall
 
 _end:
     mov rax, 60
