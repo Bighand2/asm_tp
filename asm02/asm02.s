@@ -1,17 +1,17 @@
 global _start
 
 section .bss
-    input resb 256
+    input resb 16
 section .data
     msg db "1337", 10
 
 section .text
 _start:
-    ;sys_read()
+    
     mov rax, 0
     mov rdi, 0
     mov rsi, input
-    mov rdx, 256
+    mov rdx, 16
     syscall
 
     cmp byte [input], 0x34
