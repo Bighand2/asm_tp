@@ -5,45 +5,37 @@ section .bss
 
 section .text
 _start:
-    ; Lecture sur stdin
-    mov rax, 0              ; sys_read
-    mov rdi, 0              ; stdin
+    mov rax, 0              
+    mov rdi, 0              
     mov rsi, buffer
     mov rdx, 16
     syscall
 
-    ; Si la lecture échoue ou est vide
     cmp rax, 0
     jle .error
 
-    ; Vérification de la longueur de la saisie (incluant le saut de ligne \n)
-    cmp rax, 2              ; 2 octets attendus pour "4\n", "5\n" ou "a\n"
+    cmp rax, 2            
     je .check_len_2
     
-    cmp rax, 3              ; 3 octets attendus pour "-4\n"
+    cmp rax, 3              
     je .check_len_3
 
-    ; Toute autre longueur provoque une erreur
     jmp .error
 
 .check_len_2:
-    ; Vérification que la saisie se termine bien par un saut de ligne
     cmp byte [buffer + 1], 10
     jne .error
 
-    ; Vérification si l'entrée est exactement "4"
     cmp byte [buffer], '4'
     je .is_even
 
-    ; Vérification si l'entrée est exactement "5"
     cmp byte [buffer], '5'
     je .is_odd
 
-    ; Si l'entrée est "a" ou n'importe quel autre caractère, c'est une erreur
     jmp .error
 
 .check_len_3:
-    ; Vérification stricte de la chaîne "-4\n"
+
     cmp byte [buffer], '-'
     jne .error
     cmp byte [buffer + 1], '4'
@@ -54,16 +46,16 @@ _start:
     jmp .is_even
 
 .is_even:
-    mov rax, 60             ; sys_exit
-    mov rdi, 0              ; Code 0 (pair)
+    mov rax, 60             
+    mov rdi, 0              
     syscall
 
 .is_odd:
-    mov rax, 60             ; sys_exit
-    mov rdi, 1              ; Code 1 (impair)
+    mov rax, 60             
+    mov rdi, 1              
     syscall
 
 .error:
-    mov rax, 60             ; sys_exit
-    mov rdi, 2              ; Code 2 (non numérique ou non autorisé)
+    mov rax, 60             
+    mov rdi, 2              
     syscall
